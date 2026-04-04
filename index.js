@@ -4,11 +4,13 @@ dotenv.config();
 import connectDb from './DB/Db.js'
 import Userrouter from './routes/Userroutes.js'
 import RecordRouter from './routes/recordroutes.js';
+import DashboardRouter from './routes/dashboardRoutes.js';
 
-const app=express();
+const app = express();
 app.use(express.json());
-app.use('/api',Userrouter);
-app.use('/api',RecordRouter);
+app.use('/api', Userrouter);
+app.use('/api', RecordRouter);
+app.use('/api', DashboardRouter);
 app.get('/',(req,res)=>{
 
     console.log("This is Home page");
