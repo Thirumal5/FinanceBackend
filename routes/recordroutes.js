@@ -1,7 +1,10 @@
 import express from "express";
-import recordControllers from "../Controllers/RecordController.js";
+import { recordControllers, getRecords,updaterecord,deleteRecord} from "../Controllers/RecordController.js";
 
-const router=express.Router();
-router.post('/records',recordControllers);
+const router = express.Router();
+router.post('/records', recordControllers);
+router.get('/records', getRecords);
+router.put('/record:id',updaterecord);
+router.delete('/record:id',deleteRecord);
 
-export  default recordControllers;
+export default router;
