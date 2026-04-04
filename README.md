@@ -1,71 +1,180 @@
 # Finance Data Processing and Access Control Backend
 
-A logically structured finance management backend with role-based access control (RBAC), data aggregation, and filtering.
+A well-structured backend system for managing financial data with role-based access control (RBAC), aggregation logic, and filtering capabilities.
+
+---
 
 ## 🚀 Key Features
 
-- **User & Role Management**: Admin can manage users and their roles (Admin, Analyst, Viewer).
-- **Financial Records CRUD**: Full management of income and expense entries.
-- **Dashboard Summary**: Aggregate data with total income, expense, balance, and category breakdowns.
-- **Strict RBAC**:
-  - **Admin**: Full access to all data and user management.
-  - **Analyst**: Can view records and dashboard insights.
-  - **Viewer**: Can only view the dashboard summary.
-- **Filtering**: Search records by `type` (income/expense) or `category`.
-- **Validation**: Clean error handling and input validation.
+* **User & Role Management**
+
+  * Create, update, delete, and view users
+  * Role-based access: Admin, Analyst, Viewer
+
+* **Financial Records Management**
+
+  * Full CRUD operations for income and expense records
+  * Each record includes: amount, type, category, date, note, and user reference
+
+* **Dashboard Summary API**
+
+  * Total income
+  * Total expenses
+  * Net balance
+  * Category-wise breakdown
+  * Top 5 recent transactions
+
+* **Role-Based Access Control (RBAC)**
+
+  * **Admin** → Full access (Users + Records)
+  * **Analyst** → View records + dashboard insights
+  * **Viewer** → Dashboard only
+
+* **Filtering Support**
+
+  * Filter records using query params:
+
+    * `?type=income`
+    * `?type=expense`
+    * `?category=food`
+
+* **Validation & Error Handling**
+
+  * Standard response format: `{ success, message, data }`
+  * Proper HTTP status codes
+  * MongoDB ID validation to prevent crashes
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Node.js & Express**
-- **MongoDB & Mongoose**
-- **dotenv** (Environment variables)
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* dotenv
+
+---
 
 ## 📂 Project Structure
 
-- `/Controllers`: Business logic for Users, Records, and Dashboard.
-- `/models`: Mongoose schemas.
-- `/routes`: API endpoints.
-- `/middleware`: RBAC logic.
-- `/DB`: Database connection setup.
+```
+backend/
+│
+├── controllers/
+├── models/
+├── routes/
+├── middleware/
+├── DB/
+├── index.js
+```
+
+---
 
 ## 🚦 Getting Started
 
-1. **Clone the repository.**
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-3. **Configure Environment**:
-   Create a `.env` file with:
-   ```env
-   MONGO_URI=your_mongodb_connection_string
-   PORT=3000
-   ```
-4. **Run the server**:
-   ```bash
-   node index.js
-   ```
+### 1. Clone the repository
 
-## 📝 API Endpoints
+```bash
+git clone <your-repo-link>
+```
 
-### Authentication (Mock)
-Include the header `x-user-role` in your requests:
-- `x-user-role: admin`
-- `x-user-role: analyst`
-- `x-user-role: viewer`
+### 2. Install dependencies
 
-### Dashboard
-- `GET /api/dashboard`: Summary data (All roles)
+```bash
+npm install
+```
 
-### Records
-- `GET /api/records`: List records (Admin, Analyst)
-- `GET /api/records?type=expense`: Filtered list
-- `POST /api/records`: Create record (Admin)
-- `PUT /api/records/:id`: Update record (Admin)
-- `DELETE /api/records/:id`: Delete record (Admin)
+### 3. Configure Environment Variables
 
-### Users (Admin Only)
-- `GET /api/Users`: List all users
-- `POST /api/Users`: Create user
-- `PUT /api/Users/:id`: Update user
-- `DELETE /api/Users/:id`: Delete user
+Create a `.env` file:
+
+```env
+MONGO_URI=your_mongodb_connection_string
+PORT=3000
+```
+
+### 4. Run the server
+
+```bash
+node index.js
+```
+
+---
+
+## 📝 API Usage
+
+### 🔐 Mock Authentication
+
+Use header:
+
+```
+x-user-role: admin | analyst | viewer
+```
+
+---
+
+### 📊 Dashboard
+
+```
+GET /api/dashboard
+```
+
+Accessible by: Admin, Analyst, Viewer
+
+---
+
+### 💰 Records
+
+```
+GET    /api/records
+GET    /api/records?type=expense
+GET    /api/records/:id
+POST   /api/records
+PUT    /api/records/:id
+DELETE /api/records/:id
+```
+
+* Admin → Full access
+* Analyst → Read only
+* Viewer → No access
+
+---
+
+### 👤 Users (Admin Only)
+
+```
+GET    /api/users
+POST   /api/users
+PUT    /api/users/:id
+DELETE /api/users/:id
+```
+
+---
+
+## ⚠️ Assumptions
+
+* Authentication is simplified using request headers (`x-user-role`)
+* JWT and password encryption are not implemented as they were optional
+* Focus is on backend logic, structure, and role-based access
+
+---
+
+## 🔮 Future Improvements
+
+* JWT-based authentication
+* Password hashing (bcrypt)
+* Pagination & search
+* Rate limiting
+* Unit testing
+
+---
+
+## ✅ Conclusion
+
+This project demonstrates:
+
+* Clean backend architecture
+* Role-based access control
+* Aggregation-based dashboard logic
+* Real-world API design practices
