@@ -42,11 +42,9 @@ export const getRecords = async (req, res) => {
         if (type) filter.type = type;
         if (category) filter.category = category;
 
-        // Sorting logic
-        let sortOption = { date: -1 }; // Default: Latest first
+        let sortOption = { date: -1 }; 
         if (sort === "oldest") sortOption.date = 1;
 
-        // Pagination logic
         const skip = (parseInt(page) - 1) * parseInt(limit);
 
         const records = await Record.find(filter)

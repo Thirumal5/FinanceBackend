@@ -114,20 +114,13 @@ x-user-role: admin | analyst | viewer
 
 ---
 
-## 🖥️ Visual API Testing
-
-A custom-built **Visual API Explorer** is included in the project for easy testing without Postman.
-
+## 🖥️ Visual API Testing (Admin Dashboard)
+A complete **Interactive Admin Dashboard** is included in the project for easy testing:
 1.  Ensure the server is running (`node index.js`).
-2.  Locate `test-api.html` in the `backend/` directory.
-3.  Open `test-api.html` in any web browser.
-4.  Use the interactive buttons to test different roles:
-    *   **Viewer**: Test Dashboard access.
-    *   **Analyst**: Test Records access.
-    *   **Admin**: Test User Management and Record Creation.
-
-> [!TIP]
-> For **Record Creation**, click "Get Users (Admin)" first to populate a valid user list for selections.
+2.  Locate `test-api.html` in the `backend/` directory or visit root `/`.
+3.  **Role Selector**: Switch between Admin, Analyst, and Viewer roles.
+4.  **Admin Panel**: Exclusive access to Create, Update, and Delete users (automatically hidden for other roles).
+5.  **Status Badges**: Real-time HTTP status feedback for 200 OK and 403 Forbidden scenarios.
 
 ---
 

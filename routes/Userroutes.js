@@ -5,9 +5,9 @@ import { allowRoles } from "../middleware/roleMiddleware.js";
 const router = express.Router();
 
 
-router.post('/Users', allowRoles('admin'), usercontrollers);
-router.get('/Users', allowRoles('admin'), getusercontrollers);
-router.put('/Users/:id', allowRoles('admin'), updateUser);
-router.delete('/Users/:id', allowRoles('admin'), deleteUser);
+router.post('/users', allowRoles('admin'), usercontrollers);
+router.get('/users', allowRoles('admin'), getusercontrollers);
+router.put('/users/:id', allowRoles('admin'), updateUser);
+router.delete('/users/:id', allowRoles('admin'), deleteUser);
 
 export default router;

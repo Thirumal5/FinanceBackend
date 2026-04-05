@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Dashboard API Explorer</title>
+    <title>Finance Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -30,13 +30,8 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             width: 100%;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         header {
@@ -58,74 +53,50 @@
             font-size: 1.1rem;
         }
 
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
         .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .section-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
+            color: var(--accent);
         }
 
-        .button-grid {
+        .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
-        }
-
-        button {
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            font-family: inherit;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: var(--primary);
-            color: white;
-        }
-
-        button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+            align-items: end;
         }
 
         .input-group {
-            margin-top: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
+            font-weight: 600;
         }
 
-        select, input {
+        input, select {
             padding: 12px;
             background: #0f172a;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -133,27 +104,93 @@
             color: white;
             font-family: inherit;
             outline: none;
+            transition: 0.3s;
         }
 
-        select:focus {
-            border-color: var(--accent);
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
         }
 
-        .response-area {
-            margin-top: 40px;
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: white;
+            white-space: nowrap;
         }
 
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .btn-primary { background: var(--primary); }
+        .btn-success { background: var(--success); }
+        .btn-error { background: var(--error); }
+        .btn-warning { background: var(--warning); color: #000; }
+        .btn-small { padding: 6px 12px; font-size: 0.8rem; }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            padding: 14px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .type-income { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .type-expense { background: rgba(239, 68, 68, 0.1); color: var(--error); }
+        
+        .role-admin { border: 1px solid var(--error); color: var(--error); }
+        .role-analyst { border: 1px solid var(--warning); color: var(--warning); }
+        .role-viewer { border: 1px solid var(--success); color: var(--success); }
+
+        #adminPanel, #financePanel { display: none; margin-top: 20px; }
+
+        .response-area { margin-top: 30px; }
         pre {
             background: #020617;
             padding: 24px;
             border-radius: 16px;
             overflow-x: auto;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             line-height: 1.6;
             color: #ec4899;
-            min-height: 100px;
-            position: relative;
+            min-height: 60px;
         }
 
         .status-badge {
@@ -162,261 +199,333 @@
             gap: 6px;
             padding: 6px 14px;
             border-radius: 9999px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
-
-        .status-2xx { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
-        .status-4xx { background: rgba(239, 68, 68, 0.1); color: var(--error); border: 1px solid rgba(239, 68, 68, 0.2); }
-        .status-5xx { background: rgba(245, 158, 11, 0.1); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .sb-2xx { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .sb-4xx { background: rgba(239, 68, 68, 0.1); color: var(--error); }
 
         .loader {
             display: none;
             color: var(--accent);
             font-size: 0.9rem;
-            margin-bottom: 10px;
             font-weight: 600;
-            animation: pulse 1.5s infinite;
+            margin-bottom: 10px;
+            animation: pulse 1s infinite alternate;
         }
+        @keyframes pulse { from { opacity: 0.6; } to { opacity: 1; } }
 
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        .badge {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-        .badge-admin { background: #fee2e2; color: #991b1b; }
-        .badge-analyst { background: #fef3c7; color: #92400e; }
-        .badge-viewer { background: #dcfce7; color: #166534; }
-
-        .empty-state {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .user-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--card-bg); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Finance API Explorer</h1>
-            <p class="subtitle">10/10 Priority Improvements - Role Validation & Error Handling</p>
+            <h1>Finance Admin Dashboard</h1>
+            <p class="subtitle">Complete User Management & Role-Based Access Control</p>
         </header>
 
-        <!-- Configuration Section -->
-        <div class="section">
-            <div class="section-title">⚙️ Global Configuration</div>
-            <div class="input-group">
-                <label for="currentRole">Acting As (x-user-role):</label>
-                <select id="currentRole">
-                    <option value="admin">Admin (Full Access)</option>
-                    <option value="analyst">Analyst (View Only)</option>
-                    <option value="viewer">Viewer (Dashboard Only)</option>
-                    <option value="guest">Guest (Unauthorized)</option>
-                </select>
+        <div class="layout">
+            <div class="section">
+                <div class="section-title">🕵️ Acting Role (Session)</div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Select Your Identity:</label>
+                        <select id="sessionRole" onchange="togglePanels()">
+                            <option value="admin">Admin (Full Control)</option>
+                            <option value="analyst">Analyst (View Data)</option>
+                            <option value="viewer">Viewer (Dashboard Only)</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Testing Section -->
-        <div class="section">
-            <div class="section-title">📊 Retrieval & Management</div>
-            <div class="button-grid">
-                <button onclick="testAPI('/api/dashboard')">Get Dashboard</button>
-                <button onclick="testAPI('/api/records')">Get Records (Latest)</button>
-                <button onclick="fetchUsers()">Manage Users</button>
+            <!-- Admin Panel (User Management) -->
+            <div id="adminPanel" class="section">
+                <div class="section-title">👤 User Management Panel</div>
+                <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div class="section-title" style="font-size: 1rem;">✨ Create New User</div>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <input type="text" id="newName" placeholder="John Doe">
+                        </div>
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="newEmail" placeholder="john@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label>Role</label>
+                            <select id="newRole">
+                                <option value="viewer">Viewer</option>
+                                <option value="analyst">Analyst</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success" onclick="createUser()">Create User</button>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="getAllUsers()" style="margin-bottom: 15px;">Refresh User List</button>
+                <div class="table-container">
+                    <table id="usersTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersBody"></tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- Dynamic Actions Section -->
-        <div class="section" id="actionsSection" style="display: none;">
-            <div class="section-title">✍️ Contextual Actions</div>
-            <div class="input-group">
-                <label id="actionLabel">Selected User ID:</label>
-                <input type="text" id="targetId" readonly placeholder="Click a user from 'Manage Users' to select">
-            </div>
-            <div class="button-grid" style="margin-top: 20px;">
-                <button onclick="createRecord()" style="background: var(--success);" id="btnCreate">Create Record</button>
-                <button onclick="toggleUserStatus()" style="background: var(--primary);" id="btnStatus">Toggle Active Status</button>
-            </div>
-        </div>
+            <!-- Record Management Panel (Admin/Analyst) -->
+            <div id="financePanel" class="section">
+                <div class="section-title">💰 Financial Record Management</div>
+                
+                <!-- Create/Search Toggle -->
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="btn btn-primary btn-small" onclick="showRecordSubPanel('createRec')">➕ Create Record</button>
+                    <button class="btn btn-primary btn-small" onclick="showRecordSubPanel('searchRec')">🔍 Search/Filter</button>
+                </div>
 
-        <!-- Response Area -->
-        <div class="response-area">
-            <div id="loader" class="loader">🛰️ Connecting to Backend...</div>
-            <div id="statusArea"></div>
-            <pre id="output">// Results will appear here...</pre>
+                <!-- Create Form -->
+                <div id="createRec" style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div class="section-title" style="font-size: 1rem;">📝 Create New Record</div>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Amount ($)</label>
+                            <input type="number" id="recAmount" placeholder="100.00">
+                        </div>
+                        <div class="input-group">
+                            <label>Category</label>
+                            <input type="text" id="recCategory" placeholder="Rent, Salary, food...">
+                        </div>
+                        <div class="input-group">
+                            <label>Type</label>
+                            <select id="recType">
+                                <option value="expense">Expense</option>
+                                <option value="income">Income</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>For User (Owner)</label>
+                            <select id="recUserId"></select>
+                        </div>
+                        <button class="btn btn-success" onclick="createRecord()">Add Record</button>
+                    </div>
+                </div>
+
+                <!-- Search/Filter -->
+                <div id="searchRec" style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; display: none; margin-bottom: 20px;">
+                    <div class="section-title" style="font-size: 1rem;">🔍 Advanced Filters</div>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Category</label>
+                            <input type="text" id="searchCategory" placeholder="e.g. food">
+                        </div>
+                        <div class="input-group">
+                            <label>Filter Type</label>
+                            <select id="searchType">
+                                <option value="">All Types</option>
+                                <option value="income">Income ONLY</option>
+                                <option value="expense">Expense ONLY</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Sort By</label>
+                            <select id="searchSort">
+                                <option value="latest">Latest First</option>
+                                <option value="oldest">Oldest First</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="getAllRecords()">Apply Filter</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="recordsTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th>Owner</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Global Test Actions -->
+            <div class="section">
+                <div class="section-title">⚙️ Operational Logs</div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-primary btn-small" onclick="callAPI('/api/dashboard')">Get Dashboard Summary</button>
+                    <button class="btn btn-error btn-small" onclick="testInsecure()">Test 403 Security (XSS/Bypass)</button>
+                </div>
+            </div>
+
+            <!-- Console -->
+            <div class="response-area">
+                <div id="loader" class="loader">🛰️ Backend handshaking...</div>
+                <div id="statusBadgeArea"></div>
+                <pre id="console">// JSON Response output area...</pre>
+            </div>
         </div>
     </div>
 
     <script>
         const API_BASE = window.location.origin;
 
+        window.onload = togglePanels;
+
+        function showRecordSubPanel(id) {
+            document.getElementById('createRec').style.display = (id === 'createRec') ? 'block' : 'none';
+            document.getElementById('searchRec').style.display = (id === 'searchRec') ? 'block' : 'none';
+        }
+
+        function togglePanels() {
+            const role = document.getElementById('sessionRole').value;
+            const adminPanel = document.getElementById('adminPanel');
+            const financePanel = document.getElementById('financePanel');
+            
+            adminPanel.style.display = (role === 'admin') ? 'block' : 'none';
+            financePanel.style.display = (role === 'admin' || role === 'analyst') ? 'block' : 'none';
+            
+            if (role === 'admin' || role === 'analyst') {
+                getAllUsers();
+                getAllRecords();
+            }
+            document.getElementById('console').innerText = `Session role: ${role}`;
+        }
+
         function setStatus(status, text) {
-            const area = document.getElementById('statusArea');
-            let className = 'status-5xx';
-            let icon = '⚠️';
-            
-            if (status >= 200 && status < 300) {
-                className = 'status-2xx';
-                icon = '✅';
-            } else if (status >= 400 && status < 500) {
-                className = 'status-4xx';
-                icon = '❌ Error';
-            }
-
-            area.innerHTML = `<div class="status-badge ${className}">${icon} ${status} ${text}</div>`;
+            const area = document.getElementById('statusBadgeArea');
+            const className = (status >= 200 && status < 300) ? 'sb-2xx' : 'sb-4xx';
+            area.innerHTML = `<div class="status-badge ${className}">${(status < 400) ? '✅' : '❌'} ${status} ${text}</div>`;
         }
 
-        function toggleLoader(show) {
-            document.getElementById('loader').style.display = show ? 'block' : 'none';
-            const buttons = document.querySelectorAll('button');
-            buttons.forEach(btn => btn.disabled = show);
-        }
-
-        async function testAPI(endpoint) {
-            const output = document.getElementById('output');
-            const role = document.getElementById('currentRole').value;
-            
-            toggleLoader(true);
-            output.innerText = '';
-            
+        async function apiRequest(endpoint, method = 'GET', body = null) {
+            const role = document.getElementById('sessionRole').value;
+            document.getElementById('loader').style.display = 'block';
             try {
-                const response = await fetch(`${API_BASE}${endpoint}`, {
-                    method: 'GET',
-                    headers: { 'x-user-role': role }
-                });
+                const options = {
+                    method,
+                    headers: { 'x-user-role': role, 'Content-Type': 'application/json' }
+                };
+                if (body) options.body = JSON.stringify(body);
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
                 const data = await response.json();
-                
                 setStatus(response.status, response.statusText);
-                output.innerText = JSON.stringify(data, null, 2);
-            } catch (err) {
-                setStatus(0, 'Connection Refused');
-                output.innerText = `Could not connect to the server. Is it running at ${API_BASE}?`;
-            } finally {
-                toggleLoader(false);
-            }
+                document.getElementById('console').innerText = JSON.stringify(data, null, 2);
+                return data;
+            } finally { document.getElementById('loader').style.display = 'none'; }
         }
 
-        async function fetchUsers() {
-            const output = document.getElementById('output');
-            const role = document.getElementById('currentRole').value;
-            
-            toggleLoader(true);
-            output.innerHTML = '';
-            
-            try {
-                const response = await fetch(`${API_BASE}/api/Users`, {
-                    method: 'GET',
-                    headers: { 'x-user-role': role }
-                });
-                const data = await response.json();
-                
-                setStatus(response.status, response.statusText);
-                
-                if (data.success && data.data.length > 0) {
-                    output.innerText = JSON.stringify(data, null, 2);
-                    document.getElementById('actionsSection').style.display = 'block';
-                    
-                    // Auto-select first user if targetId is empty
-                    if (!document.getElementById('targetId').value) {
-                        document.getElementById('targetId').value = data.data[0]._id;
-                    }
-                } else if (data.success) {
-                    output.innerHTML = '<div class="empty-state">No users found in database.</div>';
-                } else {
-                    output.innerText = JSON.stringify(data, null, 2);
+        const callAPI = (endpoint) => apiRequest(endpoint);
+        const testInsecure = () => apiRequest('/api/records', 'POST', { amount: 1, category: 'hack', type: 'income', userId: 'dummy' });
+
+        // User CRUD
+        async function getAllUsers() {
+            const data = await apiRequest('/api/users');
+            if (data.success && data.data.length > 0) {
+                const role = document.getElementById('sessionRole').value;
+                if (role === 'admin') {
+                    document.getElementById('usersTable').style.display = 'table';
+                    document.getElementById('usersBody').innerHTML = data.data.map(u => `
+                        <tr>
+                            <td>${u.name}</td>
+                            <td>${u.email}</td>
+                            <td><span class="badge role-${u.role}">${u.role}</span></td>
+                            <td>${u.isActive ? '🟢 Active' : '⚪ Inactive'}</td>
+                            <td>
+                                <button class="btn btn-warning btn-small" onclick="toggleUserStatus('${u._id}', ${u.isActive})">Toggle</button>
+                                <button class="btn btn-error btn-small" onclick="deleteUser('${u._id}')">Del</button>
+                            </td>
+                        </tr>
+                    `).join('');
                 }
-            } catch (err) {
-                setStatus(0, 'Error');
-                output.innerText = `Error: ${err.message}`;
-            } finally {
-                toggleLoader(false);
+                document.getElementById('recUserId').innerHTML = data.data.map(u => `<option value="${u._id}">${u.name} (${u.role})</option>`).join('');
             }
         }
 
-        async function toggleUserStatus() {
-            const output = document.getElementById('output');
-            const id = document.getElementById('targetId').value;
-            const role = document.getElementById('currentRole').value;
+        async function toggleUserStatus(id, current) {
+            await apiRequest(`/api/users/${id}`, 'PUT', { isActive: !current });
+            getAllUsers();
+        }
 
-            if (!id) return alert('Select a user ID first');
+        async function deleteUser(id) {
+            if (confirm('Delete User?')) {
+                await apiRequest(`/api/users/${id}`, 'DELETE');
+                getAllUsers();
+            }
+        }
 
-            toggleLoader(true);
-            try {
-                // First get current status (or just toggle blind since backend handles it)
-                const response = await fetch(`${API_BASE}/api/Users/${id}`, {
-                    method: 'PUT',
-                    headers: { 
-                        'x-user-role': role,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ toggle: true }) // Backend logic can handle toggling or explicit passing
-                });
-                const data = await response.json();
-                setStatus(response.status, response.statusText);
-                output.innerText = JSON.stringify(data, null, 2);
-            } catch (err) {
-                setStatus(0, 'Error');
-                output.innerText = err.message;
-            } finally {
-                toggleLoader(false);
+        async function createUser() {
+            const name = document.getElementById('newName').value;
+            const email = document.getElementById('newEmail').value;
+            const role = document.getElementById('newRole').value;
+            await apiRequest('/api/users', 'POST', { name, email, role });
+            getAllUsers();
+        }
+
+        // Record CRUD
+        async function getAllRecords() {
+            const cat = document.getElementById('searchCategory').value;
+            const type = document.getElementById('searchType').value;
+            const sort = document.getElementById('searchSort').value;
+            let query = `?sort=${sort}`;
+            if (cat) query += `&category=${cat}`;
+            if (type) query += `&type=${type}`;
+
+            const data = await apiRequest(`/api/records${query}`);
+            if (data.success && data.data.length > 0) {
+                document.getElementById('recordsTable').style.display = 'table';
+                document.getElementById('recordsBody').innerHTML = data.data.map(r => `
+                    <tr>
+                        <td>${r.category}</td>
+                        <td>$${r.amount}</td>
+                        <td><span class="badge type-${r.type}">${r.type}</span></td>
+                        <td>${r.createdBy?.name || 'Unknown'}</td>
+                        <td>
+                            <button class="btn btn-warning btn-small" onclick="updateRecord('${r._id}')">Edit</button>
+                            <button class="btn btn-error btn-small" onclick="deleteRecord('${r._id}')">Del</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                document.getElementById('recordsTable').style.display = 'none';
             }
         }
 
         async function createRecord() {
-            const output = document.getElementById('output');
-            const userId = document.getElementById('targetId').value;
-            const role = document.getElementById('currentRole').value;
+            const amount = document.getElementById('recAmount').value;
+            const category = document.getElementById('recCategory').value;
+            const type = document.getElementById('recType').value;
+            const userId = document.getElementById('recUserId').value;
+            await apiRequest('/api/records', 'POST', { amount, category, type, userId });
+            getAllRecords();
+        }
 
-            if (!userId) return alert('Select a user ID first');
+        async function updateRecord(id) {
+            const newAmount = prompt('Enter new amount:');
+            const newCat = prompt('Enter new category:');
+            if (newAmount && newCat) {
+                await apiRequest(`/api/records/${id}`, 'PUT', { amount: newAmount, category: newCat });
+                getAllRecords();
+            }
+        }
 
-            toggleLoader(true);
-            try {
-                const response = await fetch(`${API_BASE}/api/records`, {
-                    method: 'POST',
-                    headers: {
-                        'x-user-role': role,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        amount: 1500,
-                        category: "Education",
-                        type: "expense",
-                        userId: userId
-                    })
-                });
-                const data = await response.json();
-                setStatus(response.status, response.statusText);
-                output.innerText = JSON.stringify(data, null, 2);
-            } catch (err) {
-                setStatus(0, 'Error');
-                output.innerText = err.message;
-            } finally {
-                toggleLoader(false);
+        async function deleteRecord(id) {
+            if (confirm('Delete Record?')) {
+                await apiRequest(`/api/records/${id}`, 'DELETE');
+                getAllRecords();
             }
         }
     </script>
