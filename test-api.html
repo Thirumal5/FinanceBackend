@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard API Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #22d3ee;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .input-group {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        select, input {
+            padding: 12px;
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-family: inherit;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: var(--accent);
+        }
+
+        .response-area {
+            margin-top: 40px;
+        }
+
+        pre {
+            background: #020617;
+            padding: 24px;
+            border-radius: 16px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #ec4899;
+            min-height: 100px;
+            position: relative;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .status-2xx { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .status-4xx { background: rgba(239, 68, 68, 0.1); color: var(--error); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .status-5xx { background: rgba(245, 158, 11, 0.1); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+
+        .loader {
+            display: none;
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        .badge-admin { background: #fee2e2; color: #991b1b; }
+        .badge-analyst { background: #fef3c7; color: #92400e; }
+        .badge-viewer { background: #dcfce7; color: #166534; }
+
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--card-bg); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Finance API Explorer</h1>
+            <p class="subtitle">10/10 Priority Improvements - Role Validation & Error Handling</p>
+        </header>
+
+        <!-- Configuration Section -->
+        <div class="section">
+            <div class="section-title">⚙️ Global Configuration</div>
+            <div class="input-group">
+                <label for="currentRole">Acting As (x-user-role):</label>
+                <select id="currentRole">
+                    <option value="admin">Admin (Full Access)</option>
+                    <option value="analyst">Analyst (View Only)</option>
+                    <option value="viewer">Viewer (Dashboard Only)</option>
+                    <option value="guest">Guest (Unauthorized)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Testing Section -->
+        <div class="section">
+            <div class="section-title">📊 Retrieval & Management</div>
+            <div class="button-grid">
+                <button onclick="testAPI('/api/dashboard')">Get Dashboard</button>
+                <button onclick="testAPI('/api/records')">Get Records (Latest)</button>
+                <button onclick="fetchUsers()">Manage Users</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Actions Section -->
+        <div class="section" id="actionsSection" style="display: none;">
+            <div class="section-title">✍️ Contextual Actions</div>
+            <div class="input-group">
+                <label id="actionLabel">Selected User ID:</label>
+                <input type="text" id="targetId" readonly placeholder="Click a user from 'Manage Users' to select">
+            </div>
+            <div class="button-grid" style="margin-top: 20px;">
+                <button onclick="createRecord()" style="background: var(--success);" id="btnCreate">Create Record</button>
+                <button onclick="toggleUserStatus()" style="background: var(--primary);" id="btnStatus">Toggle Active Status</button>
+            </div>
+        </div>
+
+        <!-- Response Area -->
+        <div class="response-area">
+            <div id="loader" class="loader">🛰️ Connecting to Backend...</div>
+            <div id="statusArea"></div>
+            <pre id="output">// Results will appear here...</pre>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        function setStatus(status, text) {
+            const area = document.getElementById('statusArea');
+            let className = 'status-5xx';
+            let icon = '⚠️';
+            
+            if (status >= 200 && status < 300) {
+                className = 'status-2xx';
+                icon = '✅';
+            } else if (status >= 400 && status < 500) {
+                className = 'status-4xx';
+                icon = '❌ Error';
+            }
+
+            area.innerHTML = `<div class="status-badge ${className}">${icon} ${status} ${text}</div>`;
+        }
+
+        function toggleLoader(show) {
+            document.getElementById('loader').style.display = show ? 'block' : 'none';
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = show);
+        }
+
+        async function testAPI(endpoint) {
+            const output = document.getElementById('output');
+            const role = document.getElementById('currentRole').value;
+            
+            toggleLoader(true);
+            output.innerText = '';
+            
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'GET',
+                    headers: { 'x-user-role': role }
+                });
+                const data = await response.json();
+                
+                setStatus(response.status, response.statusText);
+                output.innerText = JSON.stringify(data, null, 2);
+            } catch (err) {
+                setStatus(0, 'Connection Refused');
+                output.innerText = `Could not connect to the server. Is it running at ${API_BASE}?`;
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        async function fetchUsers() {
+            const output = document.getElementById('output');
+            const role = document.getElementById('currentRole').value;
+            
+            toggleLoader(true);
+            output.innerHTML = '';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/Users`, {
+                    method: 'GET',
+                    headers: { 'x-user-role': role }
+                });
+                const data = await response.json();
+                
+                setStatus(response.status, response.statusText);
+                
+                if (data.success && data.data.length > 0) {
+                    output.innerText = JSON.stringify(data, null, 2);
+                    document.getElementById('actionsSection').style.display = 'block';
+                    
+                    // Auto-select first user if targetId is empty
+                    if (!document.getElementById('targetId').value) {
+                        document.getElementById('targetId').value = data.data[0]._id;
+                    }
+                } else if (data.success) {
+                    output.innerHTML = '<div class="empty-state">No users found in database.</div>';
+                } else {
+                    output.innerText = JSON.stringify(data, null, 2);
+                }
+            } catch (err) {
+                setStatus(0, 'Error');
+                output.innerText = `Error: ${err.message}`;
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        async function toggleUserStatus() {
+            const output = document.getElementById('output');
+            const id = document.getElementById('targetId').value;
+            const role = document.getElementById('currentRole').value;
+
+            if (!id) return alert('Select a user ID first');
+
+            toggleLoader(true);
+            try {
+                // First get current status (or just toggle blind since backend handles it)
+                const response = await fetch(`${API_BASE}/api/Users/${id}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'x-user-role': role,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ toggle: true }) // Backend logic can handle toggling or explicit passing
+                });
+                const data = await response.json();
+                setStatus(response.status, response.statusText);
+                output.innerText = JSON.stringify(data, null, 2);
+            } catch (err) {
+                setStatus(0, 'Error');
+                output.innerText = err.message;
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        async function createRecord() {
+            const output = document.getElementById('output');
+            const userId = document.getElementById('targetId').value;
+            const role = document.getElementById('currentRole').value;
+
+            if (!userId) return alert('Select a user ID first');
+
+            toggleLoader(true);
+            try {
+                const response = await fetch(`${API_BASE}/api/records`, {
+                    method: 'POST',
+                    headers: {
+                        'x-user-role': role,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: 1500,
+                        category: "Education",
+                        type: "expense",
+                        userId: userId
+                    })
+                });
+                const data = await response.json();
+                setStatus(response.status, response.statusText);
+                output.innerText = JSON.stringify(data, null, 2);
+            } catch (err) {
+                setStatus(0, 'Error');
+                output.innerText = err.message;
+            } finally {
+                toggleLoader(false);
+            }
+        }
+    </script>
+</body>
+</html>

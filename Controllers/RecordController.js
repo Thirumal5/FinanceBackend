@@ -36,18 +36,34 @@ export const recordControllers = async (req, res) => {
 
 export const getRecords = async (req, res) => {
     try {
-        const { type, category } = req.query;
+        const { type, category, sort, page = 1, limit = 10 } = req.query;
         let filter = {};
 
         if (type) filter.type = type;
         if (category) filter.category = category;
 
-        const records = await Record.find(filter).populate("createdBy", "name email role");
+        // Sorting logic
+        let sortOption = { date: -1 }; // Default: Latest first
+        if (sort === "oldest") sortOption.date = 1;
+
+        // Pagination logic
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+
+        const records = await Record.find(filter)
+            .sort(sortOption)
+            .skip(skip)
+            .limit(parseInt(limit))
+            .populate("createdBy", "name email role");
+
+        const totalRecords = await Record.countDocuments(filter);
 
         res.status(200).json({
             success: true,
             message: "Records retrieved successfully",
             count: records.length,
+            total: totalRecords,
+            totalPages: Math.ceil(totalRecords / limit),
+            currentPage: parseInt(page),
             data: records
         });
     } catch (err) {

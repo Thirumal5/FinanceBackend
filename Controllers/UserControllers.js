@@ -54,9 +54,11 @@ export const updateUser = async (req, res) => {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
+        const isStatusChange = Object.keys(req.body).length === 1 && req.body.hasOwnProperty('isActive');
+
         res.status(200).json({
             success: true,
-            message: "User updated successfully",
+            message: isStatusChange ? `User status updated to ${updatedUser.isActive ? 'Active' : 'Inactive'}` : "User details updated successfully",
             data: updatedUser
         });
     } catch (err) {
